@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>CodePen - A Pen by Ugwulor Emmanuel</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PIPUNICORNLogistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- jsPDF + qrcode lib (required for PDF + QR) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Link to external CSS file -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Small inline fix: hide CEO hint without removing it from HTML -->
+  <style>
+    /* hide the CEO shortcut hint visually but keep it in DOM */
+    .ceo-shortcut-hint { display: none !important; }
+  </style>
+</head>
+<body>  
+  <div id="homeLoader" class="hidden sync-loader">
+    <div class="loader-circle"></div>
+    
+</div>
+<header class="site-header">
+  <div class="header-box">
+    <div class="brand">
+      <!-- Option C: only the image is clickable -->
+      <a href="#" class="brand-link" aria-label="Go to homepage">
+        <img src="https://static.vecteezy.com/system/resources/previews/062/475/033/non_2x/unicorn-logo-icon-design-images-vector.jpg"
+             class="brand-logo" alt="PIPUNICORN logo">
+      </a>
+
+      <div class="brand-text">
+        <h1 data-i18n="brand_title">PIPUNICORNLogistics</h1>
+        <p data-i18n="brand_sub">Secure Parcel Tracking System</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="header-item"><i class="fa-solid fa-location-dot"></i> <span data-i18n="find_service">Find a Service Point</span></div>
+      <div class="header-item"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="search">Search</span></div>
+    </div>
+  </div>
+</header>
+
+<div id="google_translate_element" style="position:fixed;top:20px;right:20px;z-index:99999;"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,es,fr,de,it,pt,nl,sv,no,da,fi,is,et,lv,lt,pl,cs,sk,sl,hr,sr,bs,mk,bg,ro,hu,el,ga,cy,mt,sq,be,uk,ru,tr,zh,zh-CN,zh-TW,ja,ko,hi,ar,ur,fa,he,th,id,ms,tl,bn,ta,te,kn,ml,si,my,km,lo,ne,dz,mn,kk,ky,uz,tg,ps,sd,am,ka,hy,az,vi,ht,gn,qu,ay,cr,ca,pap'
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  
+ <!-- ===== MAIN CONTENT WRAPPER (will be hidden on successful track) ===== -->
+<div id="mainContent">
+
+  <nav class="home-nav" role="navigation" aria-label="Main navigation">
+    <a href="#" data-i18n="nav_track">Track</a>
+    <a href="#" data-i18n="nav_ship">Ship <i class="fa-solid fa-chevron-down"></i></a>
+    <a href="#" id="customerServiceLink" data-i18n="nav_support">Customer Service</a>
+  </nav>
+
+  
+  
+  
+  
+<section class="hero" 
+         style="
+           position: relative;
+           background-image: url('https://res.cloudinary.com/ddenljybr/image/upload/v1765575871/ChatGPT_Image_Dec_12_2025_10_44_46_PM_zmhpem.png');
+           background-size: cover;
+           background-position: center;
+           background-repeat: no-repeat;
+           height: 600px;
+         ">
+    
+    <!-- Dark overlay -->
+    <div class="hero-overlay" 
+         style="
+           position: absolute;
+           inset: 0;
+           background: rgba(0,0,0,0.55);
+         ">
+    </div>
+
+    <div class="hero-content" style="position: relative; z-index: 2; text-align:center; padding-top:120px; color:#fff;">
+      <h2 data-i18n="hero_title">Global logistics, intelligently delivered</h2>
+      <p data-i18n="hero_sub">Air, sea & land freight solutions you can trust.</p>
+
+      <!-- HERO TRACK -->
+      <div class="hero-track" id="heroTrack" style="margin-top:20px; display:flex; justify-content:center; gap:10px;">
+        <input id="trackingInput" placeholder="Enter Tracking Code" aria-label="Enter tracking code"
+               style="padding:12px; border-radius:4px; border:none; width:220px;">
+        
+        <button id="trackBtn" type="button" data-i18n="btn_track"
+                style="padding:12px 20px; background:#ffab00; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">
+          Track
+        </button>
+
+        <!-- LOADER -->
+        <div id="trackLoader" class="hidden" aria-hidden="true">
+          <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+  </section>
+        
+  <main>
+
+    <section id="services" class="section container">
+      <h3 data-i18n="services_title">Services we deliver</h3>
+      <div class="cards">
+        <article class="card service">
+          <h4 data-i18n="svc_air">Express Air</h4>
+          <p data-i18n="svc_air_desc">Fast, reliable air shipping connecting major hubs — with live tracking and insurance options.</p>
+        </article>
+        <article class="card service">
+          <h4 data-i18n="svc_road">Road & Last Mile</h4>
+          <p data-i18n="svc_road_desc">Secure regional and local delivery using our trusted fleet and partner drivers.</p>
+        </article>
+        <article class="card service">
+          <h4 data-i18n="svc_ocean">Ocean Freight</h4>
+          <p data-i18n="svc_ocean_desc">Competitive ocean freight with container tracking and customs handling.</p>
+        </article>
+      </div>
+    </section>
+  <!-- 🔵 PURE BACKGROUND VIDEO -->
+<video class="hero-bg" autoplay muted loop playsinline>
+  <source src="https://res.cloudinary.com/ddenljybr/video/upload/v1765583049/WhatsApp_Video_2025-12-13_at_12.37.35_AM_y9piqa.mp4" type="video/mp4">
+</video>
+    
+    <section id="how" class="section container">
+      <h3 data-i18n="how_title">How PIPUNICORNLogistics works</h3>
+      <ol class="steps">
+        <p><strong data-i18n="step_book">Book</strong> — <span data-i18n="step_book_desc">Create shipment or register parcel online or at a service point.</span></p>
+        <p><strong data-i18n="step_pickup">Pickup</strong> — <span data-i18n="step_pickup_desc">We pickup with safe packaging and chain-of-custody.</span></p>
+        <p><strong data-i18n="step_track">Track</strong> — <span data-i18n="step_track_desc">Live timeline, photo proof, and notifications.</span></p>
+        <p><strong data-i18n="step_deliver">Deliver</strong> —​ <span data-i18n="step_deliver_desc">Secure drop-off, signature, and optional receipts.</span></p>
+      </ol>
+    </section>
+
+    <section id="gallery" class="section container">
+      <h3>Real operations — real people</h3>
+      <div class="gallery">
+        <figure><img src="https://res.cloudinary.com/ddenljybr/image/upload/v1765399073/WhatsApp_Image_2025-12-10_at_9.37.18_PM_ltsupo.jpg" /><figcaption>Global air fleet in action</figcaption></figure>
+        <figure><img src="https://res.cloudinary.com/ddenljybr/image/upload/v1765399408/WhatsApp_Image_2025-12-10_at_9.42.34_PM_nu4tfn.jpg" /><figcaption>Secure handling by trained staff</figcaption></figure>
+        <figure><img src="https://res.cloudinary.com/ddenljybr/image/upload/v1765399525/logo2.jpg_czyjng.jpg" /><figcaption>Dedicated regional fleet</figcaption></figure>
+        <figure><img src="https://res.cloudinary.com/ddenljybr/image/upload/v1765399616/logo3.jpg_hdqpqm.jpg" /><figcaption>Ocean freight across seas</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="about" class="section container">
+      <h2><strong>About Us</strong></h2>
+      <div class="brand-story-box">
+        <p>In a world that never stops moving, one thing remains constant: people need their items delivered safely, quickly, and without stress.</p>
+        <p>At PIPUNICORN Logistics, we believe logistics should feel effortless — not confusing, not delayed, not uncertain. Just seamless movement from one point to another.</p>
+        <p>We were founded with a simple but powerful mission: to redefine what customers expect from delivery services. Not just to ship parcels… but to deliver trust, clarity, and confidence with every package we handle.</p>
+        <p>From the moment you hand over your parcel, it becomes more than an item in transit — it becomes our responsibility, our priority, and our promise to you.</p>
+        <p>We operate with the mindset that every package has a purpose: a gift meant to make someone smile, a document that secures an opportunity, a product that keeps a business running, or a personal item filled with meaning. That's why our team is built on integrity, accuracy, and genuine care.</p>
+        <p>With advanced real-time tracking technology, intelligent route optimization, and a customer support system that actually listens, we combine innovation with a human touch. Whether your shipment is local or international, urgent or standard, small or heavy — we ensure it arrives safely, securely, and exactly when you need it.</p>
+        <p>Every day, we push ourselves to be better than we were yesterday: faster in delivery, smarter in logistics, stronger in service. Our customers trust us because we don't just move parcels — we move possibilities, relationships, and peace of mind.</p>
+        <p>At PIPUNICORN Logistics, excellence isn't a goal. It's the minimum standard. And as we continue expanding across countries and industries, one thing remains at the heart of our service: You. Your needs. Your expectations. Your satisfaction.</p>
+        <p>We are more than a logistics company. We are your delivery partner. Your reliability engine. Your bridge between here and anywhere.</p>
+        <p>Welcome to PIPUNICORN Logistics — Where your package gets VIP treatment, and every delivery tells a story worth trusting.</p>
+      </div>
+    </section>
+
+    <!-- ===== EMAIL CUSTOMER SERVICE MODAL ===== -->
+    <div id="emailModal" class="hidden">
+      <div class="modal-inner">
+        <button class="close-modal" id="closeEmailModal">&times;</button>
+        <h3><i class="fas fa-envelope"></i> Contact Customer Service</h3>
+        
+        <div class="contact-options">
+          <div class="contact-option">
+            <div class="contact-icon">
+              <i class="fa-solid fa-envelope-circle-check"></i>
+            </div>
+            <h4>Email Us Directly</h4>
+            <p>Send your inquiry directly to our support team:</p>
+            <div class="email-display">
+              <i class="fa-solid fa-at"></i>
+              <strong>pipunicornlogistics@gmail.com</strong>
+            </div>
+           <a href="mailto:pipunicornlogistics@gmail.com?subject=Customer Service Inquiry" class="btn-email" target="_blank">
+  <i class="fa-solid fa-paper-plane"></i> Open Email App
+</a>
+            <p class="small-note"><i class="fa-solid fa-clock"></i> We respond within 24 hours</p>
+          </div>
+          
+          <div class="contact-option">
+            <div class="contact-icon">
+              <i class="fa-solid fa-comment-dots"></i>
+            </div>
+            <h4>Write Your Message</h4>
+            <p>Fill this form to prepare your email:</p>
+            <form id="emailForm">
+              <div class="form-group">
+                <label for="customerName"><i class="fa-solid fa-user"></i> Your Full Name</label>
+                <input type="text" id="customerName" placeholder="Enter your name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="customerEmail"><i class="fa-solid fa-envelope"></i> Your Email Address</label>
+                <input type="email" id="customerEmail" placeholder="your@email.com" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="emailSubject"><i class="fa-solid fa-tag"></i> Subject</label>
+                <input type="text" id="emailSubject" value="Customer Service Inquiry">
+              </div>
+              
+              <div class="form-group">
+                <label for="emailMessage"><i class="fa-solid fa-message"></i> Your Message</label>
+                <textarea id="emailMessage" placeholder="How can we help you today? Please include your tracking code if applicable." rows="5" required></textarea>
+              </div>
+              
+              <button type="submit" class="btn-send">
+                <i class="fa-solid fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+        
+        <div class="contact-info">
+          <p><i class="fa-solid fa-headset"></i> <strong>Our Support Team</strong> is ready to assist you with:</p>
+          <ul>
+            <li><i class="fa-solid fa-check-circle"></i> Tracking inquiries</li>
+            <li><i class="fa-solid fa-check-circle"></i> Delivery updates</li>
+            <li><i class="fa-solid fa-check-circle"></i> Account assistance</li>
+            <li><i class="fa-solid fa-check-circle"></i> General questions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- OWNER DASHBOARD, EDIT MODAL, CHAT widget etc. - unchanged and inside mainContent -->
+    <!-- ================= OWNER DASHBOARD (CEO area) ================= -->
+    <section id="ownerDashboard" class="hidden">
+      <h2>CEO Dashboard</h2>
+      <form id="parcelForm">
+        <h3>Register Luggage / Parcel</h3>
+        <input id="senderName" placeholder="Sender Full Name">
+        <input placeholder="Sender Address">
+        <input placeholder="Sender Country">
+        <input placeholder="Sender Phone">
+        <input id="senderEmail" placeholder="Sender Email">
+        <input id="recipientName" placeholder="Receiver Full Name">
+        <input placeholder="Receiver Address">
+        <input id="destination" placeholder="Destination Country">
+        <input id="recipientPhone" placeholder="Receiver Phone">
+        <input placeholder="Receiver Email">
+        <input type="datetime-local">
+        <input type="datetime-local">
+        <input id="parcelDesc" placeholder="Luggage Description">
+        <textarea placeholder="Additional Notes"></textarea>
+        <button type="button" id="createParcelBtn">Register Parcel</button>
+      </form>
+
+      <div id="ownerInfo"></div>
+      <div id="parcelList"></div>
+
+      <div id="parcelAdminControls">
+        <div class="admin-stats">
+          <div class="stat"><div id="totalCount">0</div><span>Total Parcels</span></div>
+          <div class="stat"><div id="inTransitCount">0</div><span>In Transit</span></div>
+          <div class="stat"><div id="deliveredCount">0</div><span>Delivered</span></div>
+        </div>
+
+        <h3>Manage Registered Parcels</h3>
+        <div id="parcelAdminList"></div>
+      </div>
+
+      <div id="adminInbox">
+        <h3>Customer Messages</h3>
+        <div id="ceoInbox"></div>
+        <div style="margin-top:8px;">
+          <button id="clearMessagesBtn" type="button">Clear All Messages</button>
+        </div>
+
+        <h3>Admin Notifications</h3>
+        <div id="adminNotifications"></div>
+      </div>
+    </section>
+
+    <!-- ===== EDIT MODAL ===== -->
+    <div id="editParcelModal" class="hidden">
+      <div class="modal-inner">
+        <h3>Edit Parcel</h3>
+        <form id="editParcelForm">
+          <input id="editCode" readonly>
+          <select id="editStatus">
+            <option>Registered</option>
+            <option>In Transit</option>
+            <option>Out for Delivery</option>
+            <option>Delivered</option>
+            <option>On Hold</option>
+          </select>
+          <input id="editLocation" placeholder="Current Location">
+          <textarea id="editNote" placeholder="Message to Client (optional)"></textarea>
+          <button type="submit">Save</button>
+          <button type="button" id="closeEditModal">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="receiptPreview" class="hidden"></div>
+    <div id="printContainer" class="hidden"></div>
+
+    <!-- ===== SINGLE CHAT BUTTON + WIDGET ===== -->
+    <button id="chatToggle" aria-label="Open chat">
+      <i class="fa-brands fa-whatsapp"></i>
+    </button>
+
+    <div id="chatWidget" aria-hidden="true">
+      <div id="chatHeader">AI Live Assistant</div>
+
+      <div id="chatBody">
+        <div class="bot-msg">
+          Hello 👋 I'm your AI Assistant.
+          Please tell me your full name and how I can assist you today.
+        </div>
+      </div>
+
+      <div id="chatInputArea">
+        <input type="text" id="chatInput" placeholder="Type your message...">
+        <button id="sendChat">Send</button>
+      </div>
+    </div>
+
+    <!-- ✅ ADDED: CEO SHORTCUT HINT (hidden via CSS above) -->
+    <div class="ceo-shortcut-hint" aria-hidden="true">Hint: Press <strong>Alt + O</strong> to open CEO login</div>
+
+  </main>
+</div>
+<!-- END mainContent -->
+
+<!-- =========================
+     MAIN TRACKING RESULT (moved outside mainContent so it can be shown alone)
+     ========================= -->
+<section id="trackingResult" class="hidden container fade-in">
+  <h2 data-i18n="tracking_details">My Parcel Tracking Details</h2>
+
+  <div class="tracking-card">
+    <h3 data-i18n="tracking_code_label">PIPUNICORNLogistics Tracking Code: <span id="trackedCode"></span></h3>
+
+    <div id="parcelDetails"></div>
+
+    <!-- MOVEMENT INDICATOR (live animation) -->
+    <div class="tracker-line" aria-hidden="true">
+      <div class="tracker-dot"></div>
+    </div>
+
+    <!-- ADDED: Vertical flow with moving vertical lines, status, and destination -->
+    <div class="vertical-flow">
+      <div class="exact-location">
+        <h4 data-i18n="current_location">Current Location</h4>
+        <p id="exactLocation">—</p>
+      </div>
+
+      <div class="v-line-wrap">
+        <div class="v-line" aria-hidden="true"></div>
+        <div class="v-dot" aria-hidden="true"></div>
+      </div>
+
+      <div class="status-flow" id="statusFlow">
+        <!-- statuses will be injected here -->
+      </div>
+
+      <div class="v-line-wrap second">
+        <div class="v-line" aria-hidden="true"></div>
+        <div class="v-dot second-dot" aria-hidden="true"></div>
+      </div>
+
+      <div class="destination">
+        <h4 data-i18n="destination">Destination</h4>
+        <p id="parcelDestination">—</p>
+      </div>
+    </div>
+    <!-- END ADDED -->
+
+    <!-- VISUAL TIMELINE -->
+    <div id="timeline"></div>
+
+    <!-- MAP CONTAINER (simulated) -->
+    <div id="historyMap"></div>
+
+    <div style="margin-top:12px;">
+      <button id="backToSearch" type="button" data-i18n="btn_track_another">Track another parcel</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER (fixed single footer) ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <h4 data-i18n="footer_company">Company</h4>
+      <ul>
+        <li><a href="#" data-i18n="footer_fraud">Fraud Awareness</a></li>
+        <li><a href="#" data-i18n="footer_legal">Legal Notice</a></li>
+        <li><a href="#" data-i18n="footer_terms">Terms of Use</a></li>
+        <li><a href="#" data-i18n="footer_privacy">Privacy Notice</a></li>
+        <li><a href="#" data-i18n="footer_cookie">Cookie Settings</a></li>
+      </ul>
+    </div>
+
+    <div class="follow-us">
+      <h4 data-i18n="follow_us">Follow Us</h4>
+      <div class="social-icons">
+        <a href="https://youtu.be/wbDPfKT5VD0?si=gB8oYnCWfdB4L829" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.facebook.com/share/v/1BsQUesoRX/" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        
+        <a href="https://www.instagram.com/pipunicornlogistics" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-newsletter">
+      <h4 data-i18n="newsletter_title">Newsletter</h4>
+      <p data-i18n="newsletter_sub">Get logistics updates & tracking tips.</p>
+      <form id="newsletterForm">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email">
+        <button type="submit" data-i18n="btn_subscribe">Subscribe</button>
+      </form>
+      <small id="newsletterMsg"></small>
+    </div>
+  </div>
+
+  <p class="footer-copy">2026 © – All rights reserved</p>
+</footer>
+
+<!-- ===== PIN ACCESS + CEO AREA (unchanged, fixed) ===== -->
+<div id="pinAccess" class="hidden">
+  <div class="pin-box">
+    <h3 data-i18n="ceo_access">CEO Access</h3>
+    <input type="password" id="pinInput" placeholder="Enter PIN">
+    <button type="button" id="verifyPinBtn" data-i18n="btn_verify">Verify</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- Link to external JS file -->
+<script src="script.js"></script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
